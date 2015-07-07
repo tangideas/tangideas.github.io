@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Bar Chart with R: a demo</title>
-  <meta name="description" content="It’s very common to visualize comparison data sets with bar chart. Below is such a data set stored in a file, named “benchmark-result.csv” for example.">
+  <title>PHP in_array()与array_search的实现</title>
+  <meta name="description" content="今天看PHP源码的时候发现in_array与array_search是通过同一个函数php_search_array来实现的，只是最后一个参数不同.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://tangobean.com/notes/bar-chart-with-r-a-demo/">
+  <link rel="canonical" href="http://tangobean.com/code/implementation-of-in_array-array_search-in-c-php/">
   <link rel="alternate" type="application/rss+xml" title="TangoBean" href="http://tangobean.com/feed.xml" />
 </head>
 
@@ -57,74 +57,83 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Bar Chart with R: a demo</h1>
-    <p class="post-meta">Mar 12, 2013 • James Tang</p>
+    <h1 class="post-title">PHP in_array()与array_search的实现</h1>
+    <p class="post-meta">Mar 1, 2012 • James Tang</p>
   </header>
 
   <article class="post-content">
-    <p>It’s very common to visualize comparison data sets with bar chart. Below is such a data set stored in a file, named “benchmark-result.csv” for example.</p>
+    <p>今天看PHP源码的时候发现in_array与array_search是通过同一个函数php_search_array来实现的，只是最后一个参数不同.</p>
 
-<pre class="brush:plain">System Benchmarks Index Values,               HPCloud,     AWS-Micro
-Dhrystone 2 using register variables,          2315.6,      782.1
-Double-Precision Whetstone,                     578.9,      195.3
-Execl Throughput,                               724.0,       48.1
-File Copy 1024 bufsize 2000 maxblocks,         1515.5,      260.8
-File Copy 256 bufsize 500 maxblocks,            991.5,      169.4
-File Copy 4096 bufsize 8000 maxblocks,         2321.8,      599.4
-Pipe Throughput,                               1031.0,       68.4
-Pipe-based Context Switching,                   506.9,       35.2
-Process Creation,                               770.3,       60.6
-Shell Scripts (1 concurrent),                  1024.6,      114.1
-Shell Scripts (8 concurrent),                   973.5,      103.7
-System Call Overhead,                          1235.3,       56.0
-System Benchmarks Index Score ,                1044.2,      127.7
+<p>in_array的实现：</p>
+
+<pre class="brush:c">PHP_FUNCTION(in_array)
+{
+    php_search_array(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+}
 </pre>
 
-<p>Now launch to R shell, and run following scripts:</p>
+<p>array_search的实现：</p>
 
-<ol>
-  <li>Load data:</li>
-</ol>
-
-<pre class="brush:bash">benchmark = read.table('/home/james/benchmark-result.csv', header=TRUE, sep=',')
+<pre class="brush:c">PHP_FUNCTION(array_search)
+{
+    php_search_array(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
+}
 </pre>
 
-<ol>
-  <li>Create matrix:</li>
-</ol>
+<p>php_search_array的代码：</p>
 
-<pre class="brush:bash">benchmark.matrix = as.matrix(benchmark[2:3])
+<pre class="brush:c">static void php_search_array(INTERNAL_FUNCTION_PARAMETERS, int behavior)
+{
+    zval *value,                /* value to check for */
+         *array,                /* array to check in */
+         **entry,               /* pointer to array entry */
+          res;                  /* comparison result */
+    HashPosition pos;           /* hash iterator */
+    zend_bool strict = 0;       /* strict comparison or not */
+    ulong num_key;
+    uint str_key_len;
+    char *string_key;
+    int (*is_equal_func)(zval *, zval *, zval * TSRMLS_DC) = is_equal_function;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "za|b", &#038;value, &#038;array, &#038;strict) == FAILURE) {
+        return;
+    }
+
+    if (strict) {
+        is_equal_func = is_identical_function;
+    }
+
+    zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(array), &#038;pos);
+    while (zend_hash_get_current_data_ex(Z_ARRVAL_P(array), (void **)&#038;entry, &#038;pos) == SUCCESS) {
+        is_equal_func(&#038;res, value, *entry TSRMLS_CC);
+        if (Z_LVAL(res)) {
+            if (behavior == 0) {
+                RETURN_TRUE;
+            } else {
+                /* Return current key */
+                switch (zend_hash_get_current_key_ex(Z_ARRVAL_P(array), &#038;string_key, &#038;str_key_len, &#038;num_key, 0, &#038;pos)) {
+                    case HASH_KEY_IS_STRING:
+                        RETURN_STRINGL(string_key, str_key_len - 1, 1);
+                        break;
+                    case HASH_KEY_IS_LONG:
+                        RETURN_LONG(num_key);
+                        break;
+break;
+                }
+            }
+        }
+        zend_hash_move_forward_ex(Z_ARRVAL_P(array), &#038;pos);
+    }
+
+    RETURN_FALSE;
+}
 </pre>
 
-<ol>
-  <li>Set row names:</li>
-</ol>
+<p>behavior参数为1时为search，0为判断元素是否存在.<br />
+默认情况下用is_equal_function函数来判断元素值是否相同，如果是严格比较，则使用is_identical_function函数。</p>
 
-<pre class="brush:bash">rownames(benchmark.matrix) &lt;- benchmark[,1]
-</pre>
-
-<ol>
-  <li>Open graphics device for PNG:</li>
-</ol>
-
-<pre class="brush:bash">png(filename="/home/james/benchmark-result-barchart.png", width=800, height=520, unit="px")
-</pre>
-
-<ol>
-  <li>Generate the bar chart:</li>
-</ol>
-
-<pre class="brush:bash">barplot(t(benchmark.matrix), beside=TRUE, legend=TRUE, ylab="Index Value", cex.names=.75)
-</pre>
-
-<ol>
-  <li>Close graphics device:</li>
-</ol>
-
-<pre class="brush:bash">dev.off()
-</pre>
-
-<p>Done.</p>
+<p>in_array与array_search在PHP中调用时的参数都是( mixed $needle , array $haystack [, bool $strict = false ] ), 所以<br />
+zend_parse_parameters的type_spec参数的值是”za|b”, z表示任意类型, a表示必须是array, |表示之后的参数为可选, b是boolean。</p>
 
   </article>
 

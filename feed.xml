@@ -1,0 +1,3539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TangoBean</title>
+    <description>Think In Practice</description>
+    <link>http://tangobean.com/</link>
+    <atom:link href="http://tangobean.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 07 Jul 2015 16:17:58 +0000</pubDate>
+    <lastBuildDate>Tue, 07 Jul 2015 16:17:58 +0000</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Performance improvement after code refactoring</title>
+        <description>&lt;p&gt;I took over an existing project recently. Unfortunately, the code is difficult to understand and maintain: the code was written in procedural with many duplicated codes. It’s really painful to add new features, even modify a simple testing condition, I have to scroll up and down in a single code file with more than thousands of lines. So the primary objctive of refactoring is to improve the code design, in order to make it more easier to understand and maintain. I spent a few days to analyze the existing code, and rewritten the code in object-oriented paradigm.&lt;/p&gt;
+
+&lt;p&gt;After refactoring, I tested and compared the performance of both codes. The result is encouraging, the new code is running more stable and has a overall improvement in executing time. For this project is not providing simple web page services, the executing time highly depends on the specific user request context, so it’s difficult to write testing cases for benchmark. For this reason, I extracted the statistical executing time from real running environment for both version of code.&lt;/p&gt;
+
+&lt;p&gt;I will call the old version code and the new version code as V1 and V2 respectively. Following data and plots show the response times for server running at relatively low and high load. Every set of data was generated in one hour.&lt;/p&gt;
+
+&lt;h3 id=&quot;low-load-situation&quot;&gt;Low load situation&lt;/h3&gt;
+
+&lt;p&gt;V1 response time&lt;/p&gt;
+
+&lt;table width=&quot;534&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+  &lt;colgroup&gt; &lt;col width=&quot;206&quot; /&gt; &lt;col width=&quot;116&quot; /&gt; &lt;col span=&quot;2&quot; width=&quot;106&quot; /&gt; &lt;/colgroup&gt; &lt;tr&gt;
+    &lt;td width=&quot;206&quot; height=&quot;18&quot;&gt;
+      Resp. Time Range(ms)
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;116&quot;&gt;
+      Resp Count
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Percentage
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Accu. Per.
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      0-10
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+           334,970
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      4.72%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      4.72%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      10-20
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+         1,383,553
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      19.48%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      24.19%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      20-30
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+        3,511,391
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      49.43%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      73.62%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      30-40
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+         1,534,209
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      21.60%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      95.22%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      40-50
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+           129,206
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1.82%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      97.04%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      50-60
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            45,071
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.63%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      97.67%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      60-70
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            30,191
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.42%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.10%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      70-80
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            15,793
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.22%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.32%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      80-90
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             8,785
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.12%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.44%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      90-100
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            6,728
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.09%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.54%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      100-110
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             5,266
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.61%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      110-120
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             4,149
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.06%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.67%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      120-130
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,402
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.05%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.72%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      130-140
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,135
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.76%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      140-150
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,155
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.81%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      150-160
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,116
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.85%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      160-170
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             2,908
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.89%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      170-180
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,280
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.05%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.94%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      180-190
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             3,961
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.06%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      190-200
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             4,786
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.06%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      200-300
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            35,690
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.50%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.56%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      300-400
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+            17,350
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.24%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.81%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      400-500
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             1,630
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.83%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      500-600
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             1,028
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.84%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      600-700
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             1,187
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.86%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      700-800
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+               623
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.87%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      800-900
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+               150
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.87%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      900-1000
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+                46
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.87%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      1000+
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+             9,080
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.13%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v1.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v1-500x258.jpg&quot; alt=&quot;16-v1&quot; width=&quot;500&quot; height=&quot;258&quot; class=&quot;alignnone size-medium wp-image-767&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v1-accu.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v1-accu-500x287.jpg&quot; alt=&quot;16-v1-accu&quot; width=&quot;500&quot; height=&quot;287&quot; class=&quot;alignnone size-medium wp-image-768&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;V2 response time&lt;/p&gt;
+
+&lt;table width=&quot;524&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+  &lt;colgroup&gt; &lt;col width=&quot;206&quot; /&gt; &lt;col span=&quot;3&quot; width=&quot;106&quot; /&gt; &lt;/colgroup&gt; &lt;tr&gt;
+    &lt;td width=&quot;206&quot; height=&quot;18&quot;&gt;
+      Resp. Time Range(ms)
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Resp Count
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Percentage
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Accu. Per.
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      0-10
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      20,258
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.28%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.28%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      10-20
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      4,475,788
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      61.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      61.29%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      20-30
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,623,493
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      35.76%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      97.05%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      30-40
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      76,568
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.09%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      40-50
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      30,340
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.41%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.51%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      50-60
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      12,895
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.18%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.68%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      60-70
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5,498
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.76%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      70-80
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5,129
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.83%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      80-90
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8,560
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.12%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.94%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      90-100
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      10,141
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.14%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.08%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      100-110
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      9,741
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.13%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.21%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      110-120
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      7,714
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.11%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.32%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      120-130
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5,519
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.08%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.39%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      130-140
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      3,668
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.05%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.44%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      140-150
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,297
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.03%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.48%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      150-160
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,615
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.50%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      160-170
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,176
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.51%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      170-180
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      918
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.53%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      180-190
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      666
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.53%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      190-200
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      489
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.54%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      200-300
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      14,112
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.19%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.73%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      300-400
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      18,831
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.26%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      400-500
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      131
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      500-600
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      126
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      600-700
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      77
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      700-800
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      27
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      800-900
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      25
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      900-1000
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      30
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      1000+
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      288
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v2.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v2-500x258.jpg&quot; alt=&quot;16-v2&quot; width=&quot;500&quot; height=&quot;258&quot; class=&quot;alignnone size-medium wp-image-769&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v2-accu.png&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/16-v2-accu-500x287.png&quot; alt=&quot;16-v2-accu&quot; width=&quot;500&quot; height=&quot;287&quot; class=&quot;alignnone size-medium wp-image-770&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;high-load-situation&quot;&gt;High load situation&lt;/h3&gt;
+
+&lt;p&gt;V1 response time&lt;/p&gt;
+
+&lt;table width=&quot;524&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+  &lt;colgroup&gt; &lt;col width=&quot;206&quot; /&gt; &lt;col span=&quot;3&quot; width=&quot;106&quot; /&gt; &lt;/colgroup&gt; &lt;tr&gt;
+    &lt;td width=&quot;206&quot; height=&quot;18&quot;&gt;
+      Resp. Time Range(ms)
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Resp Count
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Percentage
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Accu. Per.
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      0-10
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      125,181
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.99%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      10-20
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,003,708
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      15.83%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      16.82%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      20-30
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      766,219
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      6.05%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      22.87%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      30-40
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,759,891
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      21.80%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      44.68%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      40-50
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,793,375
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      22.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      66.74%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      50-60
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,460,567
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      11.54%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      78.28%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      60-70
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      711,881
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5.62%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      83.91%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      70-80
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      351,485
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2.78%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      86.68%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      80-90
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      174,165
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1.38%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      88.06%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      90-100
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      88,230
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.70%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      88.76%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      100-110
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      48,826
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.39%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.14%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      110-120
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      30,767
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.24%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.39%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      120-130
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      20,802
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.16%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.55%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      130-140
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      15,563
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.12%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.67%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      140-150
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      12,479
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.10%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.77%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      150-160
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      10,540
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.08%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.86%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      160-170
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      9,458
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      89.93%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      170-180
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8,818
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      90.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      180-190
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8,447
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      90.07%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      190-200
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8,763
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      90.14%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      200-300
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      78,584
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.62%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      90.76%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      300-400
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      49,607
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.39%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.15%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      400-500
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      12,389
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.10%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.25%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      500-600
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      9,764
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.08%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.32%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      600-700
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      10,466
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.08%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.41%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      700-800
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8,982
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.07%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.48%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      800-900
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      7,357
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.06%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.54%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      900-1000
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5,113
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      91.58%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      1000+
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,066,330
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      8.42%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v1.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v1-500x258.jpg&quot; alt=&quot;22-v1&quot; width=&quot;500&quot; height=&quot;258&quot; class=&quot;alignnone size-medium wp-image-771&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v1-accu.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v1-accu-500x287.jpg&quot; alt=&quot;22-v1-accu&quot; width=&quot;500&quot; height=&quot;287&quot; class=&quot;alignnone size-medium wp-image-772&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;V2 response time&lt;/p&gt;
+
+&lt;table width=&quot;524&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+  &lt;colgroup&gt; &lt;col width=&quot;206&quot; /&gt; &lt;col span=&quot;3&quot; width=&quot;106&quot; /&gt; &lt;/colgroup&gt; &lt;tr&gt;
+    &lt;td width=&quot;206&quot; height=&quot;18&quot;&gt;
+      Resp. Time Range(ms)
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Resp Count
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Percentage
+    &lt;/td&gt;
+    
+    &lt;td width=&quot;106&quot;&gt;
+      Accu. Per.
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      0-10
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      11,619
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.09%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.09%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      10-20
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      3,423,981
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      27.37%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      27.46%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      20-30
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      7,841,554
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      62.68%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      90.14%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      30-40
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      862,265
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      6.89%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      97.03%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      40-50
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      119,273
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.95%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      97.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      50-60
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      54,839
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.44%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.43%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      60-70
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      23,996
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.19%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.62%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      70-80
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      12,736
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.10%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.72%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      80-90
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      13,441
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.11%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.83%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      90-100
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      17,846
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.14%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      98.97%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      100-110
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      17,427
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.14%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.11%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      110-120
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      15,161
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.12%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.23%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      120-130
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      11,330
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.09%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.32%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      130-140
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      7,900
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.06%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.38%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      140-150
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      5,229
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.04%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.43%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      150-160
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      3,720
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.03%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.46%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      160-170
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      2,581
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.48%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      170-180
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,994
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.02%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.49%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      180-190
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,592
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.51%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      190-200
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,210
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.51%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      200-300
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      31,230
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.25%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.76%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      300-400
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      25,771
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.21%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.97%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      400-500
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,069
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.98%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      500-600
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      575
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.98%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      600-700
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      164
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.98%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      700-800
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      64
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      800-900
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      19
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      900-1000
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.00%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      99.99%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;td height=&quot;18&quot;&gt;
+      1000+
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      1,807
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      0.01%
+    &lt;/td&gt;
+    
+    &lt;td align=&quot;right&quot;&gt;
+      100.00%
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v2.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v2-500x258.jpg&quot; alt=&quot;22-v2&quot; width=&quot;500&quot; height=&quot;258&quot; class=&quot;alignnone size-medium wp-image-773&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v2-accu.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/06/22-v2-accu-500x287.jpg&quot; alt=&quot;22-v2-accu&quot; width=&quot;500&quot; height=&quot;287&quot; class=&quot;alignnone size-medium wp-image-774&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The plots show the V1 was fluctuant at high load situation, and V2 keep consistent at both situation.&lt;/p&gt;
+
+&lt;p&gt;This post is just a experience note, not intended to compare procedural and OOP, both paradigm can be used to write excellent code, but I personally prefer OOP and believe it’s easier to write maintainable code.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 26 Jun 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/code/performance-improvement-after-code-refactoring/</link>
+        <guid isPermaLink="true">http://tangobean.com/code/performance-improvement-after-code-refactoring/</guid>
+        
+        <category>PHP</category>
+        
+        <category>Refactoring</category>
+        
+        
+        <category>code</category>
+        
+        <category>notes</category>
+        
+      </item>
+    
+      <item>
+        <title>Order problem of awk foreach</title>
+        <description>&lt;p&gt;In PHP, the order the elements of array are always displayed as it created when traverse it with foreach, but in AWK it’s not the case, it seems in random order.&lt;/p&gt;
+
+&lt;p&gt;AWK version of foeach:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:c&quot;&gt;for (var in array)
+  body
+&lt;/pre&gt;
+
+&lt;p&gt;For example, when I run following awk script, the data display in random order, but not from 1 to 11.&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;awk &#39;{i=1; while(i&amp;lt;=NF){arr[i]+=$i;i+=1}}END{for(i in arr){printf(&quot;%d=%d\n&quot;, i,arr[i]);}}&#39; demo_data.txt
+&lt;/pre&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;4=78913294
+5=72533221
+6=151446515
+7=5690950
+8=7163155
+9=12854105
+10=600865293
+11=1071720068
+1=193122485
+2=113431670
+3=306554155
+&lt;/pre&gt;
+
+&lt;p&gt;Use following method instead in order to avoid confusing if the order is required:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:c&quot;&gt;for(i=1; i &amp;lt;= length(ARRAY); i++) 
+    body
+&lt;/pre&gt;
+
+&lt;p&gt;demo_data.txt&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;9632108 5659241 15291349 3937536 3620112 7557648 283966 355788 639754 29978495 53467246 
+9657403 5669637 15327040 3946110 3625140 7571250 284820 358214 643034 30050377 53591701 
+9655299 5674226 15329525 3945152 3626141 7571293 284555 358477 643032 30048665 53592515 
+9658195 5671810 15330005 3950449 3629763 7580212 284571 357575 642146 30039707 53592070 
+9655504 5675401 15330905 3944973 3623397 7568370 285966 358200 644166 30049206 53592647 
+9658533 5674614 15333147 3941120 3630867 7571987 284417 358763 643180 30043939 53592253 
+9663355 5670377 15333732 3945271 3627271 7572542 284767 357710 642477 30043298 53592049 
+9661154 5674127 15335281 3946795 3626219 7573014 284636 358345 642981 30040659 53591935 
+9655119 5670961 15326080 3947739 3627210 7574949 285055 358086 643141 30048501 53592671 
+9654181 5668588 15322769 3947021 3627608 7574629 284603 358980 643583 30050409 53591390 
+9664004 5672546 15336550 3946492 3627060 7573552 285867 357617 643484 30038455 53592041 
+9653571 5670797 15324368 3945694 3628555 7574249 283991 357938 641929 30051367 53591913 
+9655395 5671722 15327117 3946222 3624930 7571152 283839 358734 642573 30051274 53592116 
+9655780 5672003 15327783 3942720 3625895 7568615 285084 357638 642722 30053798 53592918 
+9655786 5675341 15331127 3948867 3626483 7575350 284089 358135 642224 30044271 53592972 
+9655718 5672592 15328310 3946863 3629646 7576509 284260 359655 643915 30044217 53592951 
+9652834 5673940 15326774 3949866 3624831 7574697 284791 357703 642494 30048256 53592221 
+9656857 5670560 15327417 3947632 3629071 7576703 284152 358580 642732 30045527 53592379 
+9665378 5668883 15334261 3941470 3625433 7566903 283750 358483 642233 30048808 53592205 
+9656311 5674304 15330615 3945302 3627589 7572891 283771 358534 642305 30046064 53591875
+&lt;/pre&gt;
+</description>
+        <pubDate>Fri, 31 May 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/code/order-problem-of-awk-foreach/</link>
+        <guid isPermaLink="true">http://tangobean.com/code/order-problem-of-awk-foreach/</guid>
+        
+        <category>awk</category>
+        
+        
+        <category>code</category>
+        
+      </item>
+    
+      <item>
+        <title>Run custom shell scripts in Android</title>
+        <description>&lt;p&gt;It’s not secure and inconvenient to do some low-level testing task depending on third party APPs. Shell is especially useful for such purpose.&lt;/p&gt;
+
+&lt;h2 id=&quot;install-android-debug-bridgeadb1&quot;&gt;1. Install Android Debug Bridge(&lt;a href=&quot;http://developer.android.com/tools/help/adb.html&quot;&gt;ADB&lt;/a&gt;)&lt;/h2&gt;
+
+&lt;p&gt;Download Android SDK and run SDK Manager to install the platform-tools, as following image shows:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/03/android-adb.jpg&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/03/android-adb-500x357.jpg&quot; alt=&quot;android-adb&quot; width=&quot;500&quot; height=&quot;357&quot; class=&quot;alignnone size-medium wp-image-746&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;connect-to-android-device-with-adb&quot;&gt;2. Connect to android device with ADB&lt;/h2&gt;
+
+&lt;p&gt;In order to push file into /system file system, root mount is required, so run following commands:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;$ adb root
+$ adb remount
+&lt;/pre&gt;
+
+&lt;p&gt;If no error occurred, you should see “remount succeeded” on terminal.&lt;/p&gt;
+
+&lt;h2 id=&quot;write-shell-scripts&quot;&gt;3. Write shell scripts&lt;/h2&gt;
+
+&lt;p&gt;It’s almost the same as writing general shell scripts for Linux except the first line, for the android shell is located at /system/bin directory.&lt;/p&gt;
+
+&lt;pre class=&quot;brush: bash&quot;&gt;#!/system/bin/sh
+
+# DO SOMETHING
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;push-script-to-android&quot;&gt;4. Push script to android&lt;/h2&gt;
+
+&lt;p&gt;Push the script, test_script for example, to android:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;$ adb push /path/to/test_script /system/xbin/test_script
+&lt;/pre&gt;
+
+&lt;p&gt;And change permission:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;$ adb shell chmod 6755 /system/xbin/test_scripts
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;run-from-android&quot;&gt;5. Run from Android&lt;/h2&gt;
+
+&lt;p&gt;If you wanna run the scripts on Android, you’d better install &lt;a href=&quot;https://play.google.com/store/apps/details?id=jackpal.androidterm&amp;amp;hl=zh_CN&quot;&gt;Android Terminal Emulator&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 29 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/notes/run-custom-shell-scripts-in-android/</link>
+        <guid isPermaLink="true">http://tangobean.com/notes/run-custom-shell-scripts-in-android/</guid>
+        
+        <category>ADB</category>
+        
+        <category>Android</category>
+        
+        <category>Shell</category>
+        
+        
+        <category>notes</category>
+        
+      </item>
+    
+      <item>
+        <title>Windows batch script to start VMWare guests</title>
+        <description>&lt;p&gt;The GUI of VMWare Workstation seemed quite slow and always run into “not responding” state when I try to boot a guest. I tried the vmrun command and it works very smoothly, so I wrote a simple batch script which can be used to run a guest automatically on windows start.&lt;/p&gt;
+
+&lt;pre class=&quot;brush: plain&quot;&gt;@echo off
+
+if &quot;%1&quot; == &quot;&quot; (
+    set vm_name=X:\\default\\path\\to\\linux.vmx
+) else (
+    set vm_name=%1
+)
+
+vmrun list | findstr /E &quot;%vm_name%&quot; 1&amp;gt;NUL
+
+if errorlevel 1 (
+    echo Starting %vm_name% ...
+    vmrun -T ws start %vm_name% nogui
+) else (
+    echo %vm_name% is running
+)
+
+pause
+&lt;/pre&gt;
+
+&lt;p&gt;Windows batch script is rarely used (at least for me) so I make a note here in case I or other guys need such script in the future.&lt;/p&gt;
+
+&lt;p&gt;CMD reference: &lt;a href=&quot;http://ss64.com/nt/&quot;&gt;http://ss64.com/nt/&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 14 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/notes/windows-batch-script-to-start-vmware-guests/</link>
+        <guid isPermaLink="true">http://tangobean.com/notes/windows-batch-script-to-start-vmware-guests/</guid>
+        
+        <category>batch script</category>
+        
+        <category>CMD</category>
+        
+        <category>VMWare</category>
+        
+        <category>Windows</category>
+        
+        
+        <category>notes</category>
+        
+      </item>
+    
+      <item>
+        <title>Run VMWare guest with command line</title>
+        <description>&lt;p&gt;WMWare workstation provides a command line utility, called vmrun, to control the guest machines, they are especially useful if GUI is not required.&lt;/p&gt;
+
+&lt;p&gt;For example, start a guest instance with following command:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;vmrun -T ws start /path/to/instance.vmx nogui
+&lt;/pre&gt;
+
+&lt;p&gt;You can check how many guest instance are running:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;rmrun list
+&lt;/pre&gt;
+
+&lt;p&gt;For more information, just hit vmrun on terminal or refer to &lt;a href=&quot;https://www.vmware.com/support/developer/vix-api/vix111_vmrun_command.pdf&quot;&gt;Using vmrun to control Vitual Machines&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 13 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/server/run-vmware-guest-with-command-line/</link>
+        <guid isPermaLink="true">http://tangobean.com/server/run-vmware-guest-with-command-line/</guid>
+        
+        <category>VMWare</category>
+        
+        
+        <category>server</category>
+        
+      </item>
+    
+      <item>
+        <title>Use fsockopen to read chunked page</title>
+        <description>&lt;p&gt;PHP provides many different ways to download a page(file) through HTTP, the simplest way is using file_get_contents function which is suitable for relatively small files. If try to download large file with file_get_contents the PHP allowed memory (configured by memory_limit directive) may be exhausted with a fatal error. What’s why we need a portable way to deal with large file, where fsockopen comes in.&lt;/p&gt;
+
+&lt;p&gt;There are two main conditions we should consider: Content-Lenght specified or Chunked data.&lt;/p&gt;
+
+&lt;h2 id=&quot;initiate-socket-connection&quot;&gt;0. Initiate socket connection&lt;/h2&gt;
+
+&lt;p&gt;Use fsockopen() to initiate the socket connection. You’d better specify the error number, error message and timeout parameters, and process the error if exists.&lt;/p&gt;
+
+&lt;pre class=&quot;brush: php&quot;&gt;$url = &#39;http://test.example.com/fetch_file.php?file=testfile.iso&#39;;
+
+if (preg_match_all(&#39;#http://([^/]+)(/.+)#i&#39;, $url, $matches)) {
+    $host = $matches[1][0];
+    $path = $matches[2][0];
+} else {
+    die(&#39;Invalid URl&#39;);
+}
+
+$fp = fsockopen($host, 80, $errno, $error, 30);
+
+//Open a file pointer for write
+$wfp = fopen(&#39;file-write-to&#39;, &#39;w&#39;);
+
+//specify the block size to read
+$readBlockSize = 512;
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;content-length&quot;&gt;1. Content-Length&lt;/h2&gt;
+
+&lt;p&gt;If the Content-Length is specified by HTTP response header, the reading is straightforward just as reading general files.&lt;/p&gt;
+
+&lt;p&gt;Snippet use to read response body:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: php&quot;&gt;$data = fread($fp, $readBlockSize);
+fwrite($wfp, $data);
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;chunked&quot;&gt;2. Chunked&lt;/h2&gt;
+
+&lt;p&gt;For chuncked encoding, there is a different data format, here is a quotation from WikiPedia:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Each chunk starts with the number of octets of the data it embeds expressed in ASCII followed by optional parameters (chunk extension) and a terminating CRLF sequence, followed by the chunk data. The chunk is terminated by CRLF. If chunk extensions are provided, the chunk size is terminated by a semicolon followed with the extension name and an optional equal sign and value.&lt;/p&gt;
+
+  &lt;p&gt;The last-chunk is a regular chunk, with the exception that its length is zero.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The encoded data looks like this:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;4
+Wiki
+5
+pedia
+E
+ in
+
+chunks.
+0
+&lt;/pre&gt;
+
+&lt;p&gt;So we have to address the response chunk by chunk. Snippet to do so:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: php&quot;&gt;if ($chunk_length === false) {
+    $data = trim(fgets($fp, 128));
+    $chunk_length = hexdec($data);
+} else if ($chunk_length &amp;gt; 0) {
+    $read_length = $chunk_length &amp;gt; $readBlockSize ? $readBlockSize : $chunk_length;
+    $chunk_length -= $read_length;
+    $data = fread($fp, $read_length);
+    fwrite($wfp, $data);
+    if ($chunk_length &amp;lt;= 0) {
+        fseek($fp, 2, SEEK_CUR);
+        $chunk_length = false;
+    }
+} else {
+     break;
+}
+&lt;/pre&gt;
+
+&lt;p&gt;The full script:&lt;/p&gt;
+
+&lt;pre class=&quot;brush: php; collapse:true&quot;&gt;&amp;lt;?php
+/**
+ * Download file with fsockopen
+ * 
+ * @see http://tangobean.com
+ * @author James Tang&amp;lt;fwsous@gmail.com&amp;gt;
+ * @copyright (C) 2013 James Tang.
+ */
+
+set_time_limit(600);
+ignore_user_abort(true);
+
+//$url = &#39;http://test.example.com/fetch_file.php?file=testfile.iso&#39;;
+//$saveToFile = &#39;tmp.iso&#39;;
+$url = &#39;http://test.example.com/fetch_file.php?file=tmp.gz&#39;;
+$saveToFile = &#39;tmp.gz&#39;;
+
+if (preg_match_all(&#39;#http://([^/]+)(/.+)#i&#39;, $url, $matches)) {
+    $host = $matches[1][0];
+    $path = $matches[2][0];
+} else {
+    die(&#39;Invalid URl&#39;);
+}
+
+$fp = fsockopen($host, 80, $errno, $error, 30);
+$readBlockSize = 512;
+
+if ($fp) {
+
+    $wfp = fopen($saveToFile, &#39;w&#39;);
+
+    if ($wfp) {
+        $request = &quot;GET $path HTTP/1.1\r\n&quot;;
+        $request .= &quot;Host: $host\r\n&quot;;
+        $request .= &quot;Connection: close\r\n&quot;;
+        $request .= &quot;User-Agent: php-download/1.0\r\n&quot;;
+        $request .= &quot;\r\n&quot;;
+
+        fwrite($fp, $request);
+
+        $body_start = false;
+        $md5sum = &#39;&#39;;
+        $content_length = false;
+        $chunk_length = false;
+
+        $startLine = fgets($fp, 128);
+
+        if ($startLine &amp;#038;&amp;#038; preg_match(&#39;#^HTTP/1.\d?\s+200\s+#&#39;, $startLine)) {
+            while (!feof($fp)) {
+                if (!$body_start) {
+                    $header = fgets($fp, 128);
+                    echo $header;
+                    $colon_pos = strpos($header, &#39;:&#39;);
+                    $header_name = strtolower(trim(substr($header, 0, $colon_pos)));
+                    $header_value = trim(substr($header, $colon_pos+1)); 
+                    if ($header_name == &#39;content-md5&#39;) {
+                        $md5sum = bin2hex(base64_decode($header_value));
+                    } else if ($header_name == &#39;content-length&#39;) {
+                        $content_length = (int) $header_value;
+                    }
+                    if ($header == &quot;\r\n&quot;) {
+                        $body_start = true;
+                        echo &quot;Reading data...\n&quot;;
+                    }
+                } else {
+
+                    if ($content_length !== false &amp;#038;&amp;#038; $content_length &amp;gt; 0) {
+                        $data = fread($fp, $readBlockSize);
+                        fwrite($wfp, $data);
+                    } else {
+                        if ($chunk_length === false) {
+                            $data = trim(fgets($fp, 128));
+                            $chunk_length = hexdec($data);
+                        } else if ($chunk_length &amp;gt; 0) {
+                            $read_length = $chunk_length &amp;gt; $readBlockSize ? $readBlockSize : $chunk_length;
+                            $chunk_length -= $read_length;
+                            $data = fread($fp, $read_length);
+                            fwrite($wfp, $data);
+                            if ($chunk_length &amp;lt;= 0) {
+                                fseek($fp, 2, SEEK_CUR);
+                                $chunk_length = false;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            echo &quot;Failed to read data: &quot; . $startLine . &quot;\n&quot;;
+        }
+
+        fclose($wfp);
+        if ($md5sum &amp;#038;&amp;#038; strlen($md5sum) &amp;gt; 0) {
+            $md5sum_check = bin2hex(md5_file($saveToFile, true));
+            if ($md5sum_check != $md5sum) {
+                echo &#39;MD5 checksum does not match: &#39; . $md5sum_check . &quot;\n&quot;;
+            } else {
+                echo &quot;MD5 checksum match\n&quot;;
+            }
+        } else {
+            echo &quot;No MD5 checksum detected\n&quot;;
+        }
+        //unlink($saveToFile);
+    }
+
+    fclose($fp);
+} else {
+    echo &#39;Error: &#39; . $errno . &#39;#&#39; . $error . &quot;
+
+&lt;br /&gt;\n&quot;;
+}
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;problems&quot;&gt;3. Problems&lt;/h2&gt;
+
+&lt;p&gt;The $readBlockSize value is critical, if too large it may cause problem. When I test on remote server with $readBlockSize=4096, the downloaded file was not identical to source file. This problem must be caused by transfer rate: when you try to read 4096 bytes from the response body, but if less than 4096 bytes was prepared, then the reading sequence is disrupted. At last I found 512 works fine for me.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;4. Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Chunked_transfer_encoding&quot;&gt;http://en.wikipedia.org/wiki/Chunked_transfer_encoding&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://tools.ietf.org/html/rfc2616#page-118&quot;&gt;http://tools.ietf.org/html/rfc2616#page-118&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Wed, 13 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/code/fsockopen-read-chunked-page/</link>
+        <guid isPermaLink="true">http://tangobean.com/code/fsockopen-read-chunked-page/</guid>
+        
+        <category>PHP</category>
+        
+        
+        <category>code</category>
+        
+      </item>
+    
+      <item>
+        <title>Parse HTML with PHP DOM</title>
+        <description>&lt;p&gt;With PHP DOM extension, parsing HTML data is straightforward just as parsing DOM in JavaScript. This post will demonstrate how to use DOMDocument and DOMXPath to extract data in which we are interested from general HTML file, but not strictly structured as XML.&lt;/p&gt;
+
+&lt;p&gt;Sample file looks like this:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:html;collapse: true&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;title&amp;gt;王小五 - Profile&amp;lt;/title&amp;gt;
+        &amp;lt;meta charset=&quot;utf-8&quot; /&amp;gt;
+        &amp;lt;link href=&quot;/css/profile.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+        &amp;lt;div id=&quot;wrapper&quot;&amp;gt;
+            &amp;lt;div id=&quot;header&quot;&amp;gt;
+                &amp;lt;h1&amp;gt;王小五&amp;lt;/h1&amp;gt;
+            &amp;lt;/div&amp;gt;
+            &amp;lt;div id=&quot;content&quot;&amp;gt;
+                &amp;lt;div id=&quot;profile-box&quot;&amp;gt;
+                    &amp;lt;div id=&quot;profile-img&quot;&amp;gt;
+                        &amp;lt;img id=&quot;profile-img&quot; src=&quot;/profile_img.php?uid=32153&quot; alt=&quot;&quot; /&amp;gt;
+                    &amp;lt;/div&amp;gt;
+                    &amp;lt;ul class=&quot;ulist&quot;&amp;gt;
+                        &amp;lt;li&amp;gt;
+                            &amp;lt;span class=&quot;field-name&quot;&amp;gt;Age:&amp;lt;/span&amp;gt; 
+                            &amp;lt;span class=&quot;field-value&quot;&amp;gt;31&amp;lt;/span&amp;gt;
+                        &amp;lt;/li&amp;gt;
+                        &amp;lt;li&amp;gt;
+                            &amp;lt;span class=&quot;field-name&quot;&amp;gt;Gender:&amp;lt;/span&amp;gt; 
+                            &amp;lt;span class=&quot;field-value&quot;&amp;gt;Female&amp;lt;/span&amp;gt;
+                        &amp;lt;/li&amp;gt;
+                        &amp;lt;li&amp;gt;
+                            &amp;lt;span class=&quot;field-name&quot;&amp;gt;Location:&amp;lt;/span&amp;gt; 
+                            &amp;lt;span class=&quot;field-value&quot;&amp;gt;Guangzhou, China&amp;lt;/span&amp;gt;
+                        &amp;lt;/li&amp;gt;
+                    &amp;lt;/ul&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/div&amp;gt;
+            &amp;lt;div id=&quot;footer&quot;&amp;gt;
+                &amp;lt;div class=&quot;x13&quot;&amp;gt;&amp;copy; 2012 cctv.&amp;lt;/div&amp;gt;
+            &amp;lt;/div&amp;gt;
+        &amp;lt;/div&amp;gt;
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;load-html&quot;&gt;1. Load HTML&lt;/h2&gt;
+
+&lt;p&gt;The simplest code looks like this:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;$html = file_get_contents(&#39;data.html&#39;);
+$dom = new DOMDocument();
+$dom-&amp;gt;loadHTML($html);
+$xpath = new DOMXPath($dom);
+&lt;/pre&gt;
+
+&lt;p&gt;Notice that there are two elements with id=”profile-img” in the HTML, it’s not a “valid” HTML page, so when you try to run the code, you will encounter following PHP warning:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;PHP Warning:  DOMDocument::loadHTML(): ID profile-img already defined in Entity, line: 16 in /home/james/projects/mixedlab/linux/php/xml/dom/demo/demo.php on line 6
+&lt;/pre&gt;
+
+&lt;p&gt;Most of the times we’d like to ignore such warnings for it’s no likely for us to change the source html file which may generated by other PHP script written by a negligent programmer. Fortunately, this problem can be solved with just a little additional work:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;libxml_use_internal_errors(true);
+
+$html = file_get_contents(&#39;data.html&#39;);
+$dom = new DOMDocument();
+$dom-&amp;gt;loadHTML($html);
+$xpath = new DOMXPath($dom);
+
+libxml_clear_errors();
+&lt;/pre&gt;
+
+&lt;p&gt;Set libxml_use_internal_errors to true to suppress the warning, but still you can catch the errors if you want to do something beside just ignore it.&lt;/p&gt;
+
+&lt;p&gt;Another problem we should solve is the file encoding. The demo HTML data was encoded in UTF-8, as the meta header shows, but DOMDocument cannot recognize it. DOMDocument can only accept http-equiv meta, so we have to do some preprocess on the HTML:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;$html = str_replace(
+    &#39;
+
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&#39;, 
+    &#39;
+
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+&#39;, 
+    $html
+);
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;extract-data&quot;&gt;2. Extract Data&lt;/h2&gt;
+
+&lt;p&gt;Although DOMDocument provides many methods for manipulating elements, such as DOMDocument::getElementsByClassName(), but I think it’s less useful and more complicated than using XPath.&lt;/p&gt;
+
+&lt;p&gt;XPath::query(string $expression [, DOMNode $contextnode [, bool $registerNodeNS = true ]]) always return a DOMNodeList object if the $expression is well formed and $contextnode is valid or NULL(not set).&lt;/p&gt;
+
+&lt;p&gt;Extract user name from header(h1):&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;$nodes = $xpath-&amp;gt;query(&#39;//*[@id=&quot;header&quot;]/h1&#39;);
+$name = $nodes-&amp;gt;item(0)-&amp;gt;nodeValue;
+echo &quot;Name: &quot; . $name . &quot;\n&quot;;
+&lt;/pre&gt;
+
+&lt;p&gt;In most cases, the HTML structure is more complicated than the demo, and $contextnode will help us focus on the restricted section and keep the xpath query concise.&lt;/p&gt;
+
+&lt;p&gt;Extract sub-node by specifying the context node(for demonstration only in this case):&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;$nodes = $xpath-&amp;gt;query(&#39;//div[@id=&quot;header&quot;]&#39;);
+$headerNode = $nodes-&amp;gt;item(0);
+$nodes = $xpath-&amp;gt;query(&#39;h1&#39;, $headerNode);
+$name = $nodes-&amp;gt;item(0)-&amp;gt;nodeValue;
+echo &quot;Name: &quot; . $name . &quot;\n&quot;;
+&lt;/pre&gt;
+
+&lt;p&gt;Extract user properties:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;$nodes = $xpath-&amp;gt;query(&#39;//*[@id=&quot;profile-box&quot;]/ul/li&#39;);
+foreach ($nodes as $node) {
+    $childNodes = $xpath-&amp;gt;query(&#39;span&#39;, $node);
+    $key = $childNodes-&amp;gt;item(0)-&amp;gt;nodeValue;
+    $value = $childNodes-&amp;gt;item(1)-&amp;gt;nodeValue;
+    echo $key . &#39; &#39; . $value . &quot;\n&quot;;
+}
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;innerhtml-function&quot;&gt;3. innerHTML function&lt;/h2&gt;
+
+&lt;p&gt;Here provides a useful function for extracting the inner HTML for one node:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:php&quot;&gt;function innerHTML($node)
+{
+    $meta = &#39;
+
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=utf-8&quot; /&gt;
+&#39;;
+    $dom = new DOMDocument();
+    $dom-&amp;gt;loadHTML($meta);
+    $dom-&amp;gt;appendChild($dom-&amp;gt;importNode($node, true));
+    $html = preg_replace(
+        &#39;#^.*&amp;lt;/html&amp;gt;&amp;lt;&#39; . $node-&amp;gt;nodeName . &#39;[^&amp;gt;]*&amp;gt;(.*)&amp;lt;/&#39; . $node-&amp;gt;nodeName . &#39;&amp;gt;.*$#s&#39;, 
+        &#39;\1&#39;, $dom-&amp;gt;saveHTML());
+    return $html;
+}
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;4. Reference&lt;/h2&gt;
+
+&lt;p&gt;PHP Dom Manual: &lt;a href=&quot;http://php.net/manual/en/book.dom.php&quot;&gt;http://php.net/manual/en/book.dom.php&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Full Demo for this Post: &lt;a href=&quot;https://github.com/fwso/mixedlab/tree/master/linux/php/xml/dom/demo&quot;&gt;https://github.com/fwso/mixedlab/tree/master/linux/php/xml/dom/demo&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 12 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/code/parse-html-with-php-dom/</link>
+        <guid isPermaLink="true">http://tangobean.com/code/parse-html-with-php-dom/</guid>
+        
+        <category>DOM</category>
+        
+        <category>HTML</category>
+        
+        <category>PHP</category>
+        
+        
+        <category>code</category>
+        
+      </item>
+    
+      <item>
+        <title>Bar Chart with R: a demo</title>
+        <description>&lt;p&gt;It’s very common to visualize comparison data sets with bar chart. Below is such a data set stored in a file, named “benchmark-result.csv” for example.&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;System Benchmarks Index Values,               HPCloud,     AWS-Micro
+Dhrystone 2 using register variables,          2315.6,      782.1
+Double-Precision Whetstone,                     578.9,      195.3
+Execl Throughput,                               724.0,       48.1
+File Copy 1024 bufsize 2000 maxblocks,         1515.5,      260.8
+File Copy 256 bufsize 500 maxblocks,            991.5,      169.4
+File Copy 4096 bufsize 8000 maxblocks,         2321.8,      599.4
+Pipe Throughput,                               1031.0,       68.4
+Pipe-based Context Switching,                   506.9,       35.2
+Process Creation,                               770.3,       60.6
+Shell Scripts (1 concurrent),                  1024.6,      114.1
+Shell Scripts (8 concurrent),                   973.5,      103.7
+System Call Overhead,                          1235.3,       56.0
+System Benchmarks Index Score ,                1044.2,      127.7
+&lt;/pre&gt;
+
+&lt;p&gt;Now launch to R shell, and run following scripts:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Load data:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;benchmark = read.table(&#39;/home/james/benchmark-result.csv&#39;, header=TRUE, sep=&#39;,&#39;)
+&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create matrix:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;benchmark.matrix = as.matrix(benchmark[2:3])
+&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Set row names:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;rownames(benchmark.matrix) &amp;lt;- benchmark[,1]
+&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Open graphics device for PNG:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;png(filename=&quot;/home/james/benchmark-result-barchart.png&quot;, width=800, height=520, unit=&quot;px&quot;)
+&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Generate the bar chart:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;barplot(t(benchmark.matrix), beside=TRUE, legend=TRUE, ylab=&quot;Index Value&quot;, cex.names=.75)
+&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Close graphics device:&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre class=&quot;brush:bash&quot;&gt;dev.off()
+&lt;/pre&gt;
+
+&lt;p&gt;Done.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 12 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/notes/bar-chart-with-r-a-demo/</link>
+        <guid isPermaLink="true">http://tangobean.com/notes/bar-chart-with-r-a-demo/</guid>
+        
+        <category>Chart</category>
+        
+        <category>R</category>
+        
+        
+        <category>notes</category>
+        
+      </item>
+    
+      <item>
+        <title>Comparison of HP Cloud xsmall and AWS EC2 micro</title>
+        <description>&lt;p&gt;Both HP Cloud and AWS provides free trial for their basic services([HP Cloud xsmall][1] and [AWS EC2 micro][2]) for testing purpose. This post did some rough benchmarks on both platform targeted for web application, the server may not be carefully optimized.&lt;/p&gt;
+
+&lt;h2 id=&quot;basic-information&quot;&gt;1. Basic Information&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;
+    &lt;/th&gt;
+    
+    &lt;th&gt;
+      AWS EC2 Micro
+    &lt;/th&gt;
+    
+    &lt;th&gt;
+      HP Cloud xSmall
+    &lt;/th&gt;
+  &lt;/tr&gt;
+  
+  &lt;tr&gt;
+    &lt;th&gt;
+      CPU
+    &lt;/th&gt;
+    
+    &lt;td&gt;
+      1-2 &lt;a href=&quot;http://aws.amazon.com/ec2/faqs/#What_is_an_EC2_Compute_Unit_and_why_did_you_introduce_it&quot;&gt;EC2 Compute Unit 
+      
+      &lt;td&gt;
+        1 HP Cloud Compute Units
+      &lt;/td&gt; 
+      
+      &lt;tr&gt;
+        &lt;th&gt;
+          RAM
+        &lt;/th&gt;
+        
+        &lt;td&gt;
+          613MB
+        &lt;/td&gt;
+        
+        &lt;td&gt;
+          1GB
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      
+      &lt;tr&gt;
+        &lt;th&gt;
+          IO Performance
+        &lt;/th&gt;
+        
+        &lt;td&gt;
+          Low
+        &lt;/td&gt;
+        
+        &lt;td&gt;
+          (Low)*
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      
+      &lt;tr&gt;
+        &lt;th&gt;
+          Price
+        &lt;/th&gt;
+        
+        &lt;td&gt;
+          $0.020/hr
+        &lt;/td&gt;
+        
+        &lt;td&gt;
+          $0.035/hr
+        &lt;/td&gt;
+      &lt;/tr&gt;
+      
+      &lt;tr&gt;
+        &lt;th&gt;
+          OS(many OS available)
+        &lt;/th&gt;
+        
+        &lt;td&gt;
+          Ubuntu 12.10 x64
+        &lt;/td&gt;
+        
+        &lt;td&gt;
+          CentOS 6.3 x64
+        &lt;/td&gt;
+      &lt;/tr&gt; 
+      
+      &lt;h2&gt;
+        2. UnixBench
+      &lt;/h2&gt;
+      
+      &lt;p&gt;
+        &lt;a href=&quot;http://code.google.com/p/byte-unixbench/&quot;&gt;UnixBench&lt;/a&gt; was used as the benchmark tool.
+      &lt;/p&gt;
+      
+      &lt;p&gt;
+        Comparison diagram:&lt;br /&gt; &lt;a href=&quot;http://tangobean.com/wp-content/uploads/2013/03/aws-hpcloud1.png&quot;&gt;&lt;img src=&quot;http://tangobean.com/wp-content/uploads/2013/03/aws-hpcloud1-500x325.png&quot; alt=&quot;aws-hpcloud&quot; width=&quot;500&quot; height=&quot;325&quot; class=&quot;alignnone size-medium wp-image-591&quot; /&gt;&lt;/a&gt;
+      &lt;/p&gt;
+      
+      &lt;p&gt;
+        Benchmark result of AWS EC2 Micro:
+      &lt;/p&gt;
+      
+      &lt;pre class=&quot;brush:plain&quot;&gt;
+BYTE UNIX Benchmarks (Version 5.1.3)
+
+   System: ip-10-120-25-175: GNU/Linux
+   OS: GNU/Linux -- 3.5.0-21-generic -- #32-Ubuntu SMP Tue Dec 11 18:51:59 UTC 2012
+   Machine: x86_64 (x86_64)
+   Language: en_US.utf8 (charmap=&quot;UTF-8&quot;, collate=&quot;UTF-8&quot;)
+   CPU 0: Intel(R) Xeon(R) CPU E5645 @ 2.40GHz (4000.1 bogomips)
+          Hyper-Threading, x86-64, MMX, Physical Address Ext, SYSENTER/SYSEXIT, SYSCALL/SYSRET
+   10:48:54 up 10:07,  1 user,  load average: 0.00, 0.01, 0.05; runlevel 2
+
+------------------------------------------------------------------------
+Benchmark Run: Sat Mar 09 2013 10:48:54 - 11:18:36
+1 CPU in system; running 1 parallel copy of tests
+
+Dhrystone 2 using register variables        9126922.6 lps   (10.0 s, 7 samples)
+Double-Precision Whetstone                     1074.0 MWIPS (21.0 s, 7 samples)
+Execl Throughput                                206.9 lps   (29.8 s, 2 samples)
+File Copy 1024 bufsize 2000 maxblocks        103291.3 KBps  (30.1 s, 2 samples)
+File Copy 256 bufsize 500 maxblocks           28033.1 KBps  (30.1 s, 2 samples)
+File Copy 4096 bufsize 8000 maxblocks        347680.6 KBps  (30.1 s, 2 samples)
+Pipe Throughput                               85116.7 lps   (10.1 s, 7 samples)
+Pipe-based Context Switching                  14082.6 lps   (10.1 s, 7 samples)
+Process Creation                                763.3 lps   (30.1 s, 2 samples)
+Shell Scripts (1 concurrent)                    483.7 lpm   (60.2 s, 2 samples)
+Shell Scripts (8 concurrent)                     62.2 lpm   (60.4 s, 2 samples)
+System Call Overhead                          83998.3 lps   (10.1 s, 7 samples)
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0    9126922.6    782.1
+Double-Precision Whetstone                       55.0       1074.0    195.3
+Execl Throughput                                 43.0        206.9     48.1
+File Copy 1024 bufsize 2000 maxblocks          3960.0     103291.3    260.8
+File Copy 256 bufsize 500 maxblocks            1655.0      28033.1    169.4
+File Copy 4096 bufsize 8000 maxblocks          5800.0     347680.6    599.4
+Pipe Throughput                               12440.0      85116.7     68.4
+Pipe-based Context Switching                   4000.0      14082.6     35.2
+Process Creation                                126.0        763.3     60.6
+Shell Scripts (1 concurrent)                     42.4        483.7    114.1
+Shell Scripts (8 concurrent)                      6.0         62.2    103.7
+System Call Overhead                          15000.0      83998.3     56.0
+                                                                   ========
+System Benchmarks Index Score                                         127.7
+
+&lt;/pre&gt;
+      
+      &lt;p&gt;
+        Benchmark result of HP Cloud xSmall:
+      &lt;/p&gt;
+      
+      &lt;pre class=&quot;brush:plain&quot;&gt;
+BYTE UNIX Benchmarks (Version 5.1.3)
+
+   System: server-1362490335-az-1-region-a-geo-1: GNU/Linux
+   OS: GNU/Linux -- 2.6.32-279.19.1.el6.x86_64 -- #1 SMP Wed Dec 19 07:05:20 UTC 2012
+   Machine: x86_64 (x86_64)
+   Language: en_US.utf8 (charmap=&quot;UTF-8&quot;, collate=&quot;UTF-8&quot;)
+   CPU 0: QEMU Virtual CPU version 0.14.0 (5333.5 bogomips)
+          x86-64, MMX, Physical Address Ext, SYSCALL/SYSRET
+   08:05:42 up 2 days, 18:32,  1 user,  load average: 0.00, 0.00, 0.00; runlevel 3
+
+
+------------------------------------------------------------------------
+Benchmark Run: Fri Mar 08 2013 08:05:42 - 08:33:53
+1 CPU in system; running 1 parallel copy of tests
+
+
+Dhrystone 2 using register variables       27022690.5 lps   (10.0 s, 7 samples)
+Double-Precision Whetstone                     3184.2 MWIPS (9.9 s, 7 samples)
+Execl Throughput                               3113.1 lps   (30.0 s, 2 samples)
+File Copy 1024 bufsize 2000 maxblocks        600120.0 KBps  (30.0 s, 2 samples)
+File Copy 256 bufsize 500 maxblocks          164090.4 KBps  (30.0 s, 2 samples)
+File Copy 4096 bufsize 8000 maxblocks       1346652.0 KBps  (30.0 s, 2 samples)
+Pipe Throughput                             1282607.3 lps   (10.0 s, 7 samples)
+Pipe-based Context Switching                 202747.4 lps   (10.0 s, 7 samples)
+Process Creation                               9705.7 lps   (30.0 s, 2 samples)
+Shell Scripts (1 concurrent)                   4344.3 lpm   (60.0 s, 2 samples)
+Shell Scripts (8 concurrent)                    584.1 lpm   (60.0 s, 2 samples)
+System Call Overhead                        1852906.6 lps   (10.0 s, 7 samples)
+
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0   27022690.5   2315.6
+Double-Precision Whetstone                       55.0       3184.2    578.9
+Execl Throughput                                 43.0       3113.1    724.0
+File Copy 1024 bufsize 2000 maxblocks          3960.0     600120.0   1515.5
+File Copy 256 bufsize 500 maxblocks            1655.0     164090.4    991.5
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1346652.0   2321.8
+Pipe Throughput                               12440.0    1282607.3   1031.0
+Pipe-based Context Switching                   4000.0     202747.4    506.9
+Process Creation                                126.0       9705.7    770.3
+Shell Scripts (1 concurrent)                     42.4       4344.3   1024.6
+Shell Scripts (8 concurrent)                      6.0        584.1    973.5
+System Call Overhead                          15000.0    1852906.6   1235.3
+                                                                   ========
+System Benchmarks Index Score                                        1044.2
+&lt;/pre&gt;
+      
+      &lt;p&gt;
+        It seems that the HP Cloud xSmall is more powerful than AWS EC2 micro. Besides the RAM and CPU difference, this may also caused by the different virtualization solution of both platform.
+      &lt;/p&gt;
+      
+      &lt;h2&gt;
+        3. Apache benchmark(ab) for static page
+      &lt;/h2&gt;
+      
+      &lt;p&gt;
+        Web server: Nginx 1.2.7&lt;br /&gt; PHP(PHP-FPM): 5.4.12
+      &lt;/p&gt;
+      
+      &lt;h3&gt;
+        Benchmark with static page
+      &lt;/h3&gt;
+      
+      &lt;p&gt;
+        Static page benchmark with n=1000 and c=100:
+      &lt;/p&gt;
+      
+      &lt;table&gt;
+        &lt;tr&gt;
+          &lt;th&gt;
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            AWS EC2 micro
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            HP Cloud xSmall
+          &lt;/th&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Requests per second
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            107.12
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            10.47
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            933.491
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            9554.962
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request(all concurrent)
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            9.335
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            95.550
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Transfer rate
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            9936.57
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            31.64
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+      
+      &lt;h3&gt;
+        Benchmark with WordPress home page
+      &lt;/h3&gt;
+      
+      &lt;p&gt;
+        Another benchmark with WordPress home page was run on both server, with -n of 1000.
+      &lt;/p&gt;
+      
+      &lt;p&gt;
+        AWS EC3 micro result:
+      &lt;/p&gt;
+      
+      &lt;table&gt;
+        &lt;tr&gt;
+          &lt;th&gt;
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=100
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=200
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=500
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=600
+          &lt;/th&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Requests per second
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            113.69
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            161.25
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            117.59
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            73.77
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            879.603
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            1240.280
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            4251.989
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            8133.916
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request(all concurrent)
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            8.796
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            6.201
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            8.504
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            13.557
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Transfer rate
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            5087.52
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            7314.16
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            5325.26
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            3306.62
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+      
+      &lt;p&gt;
+        HP Cloud xSmall Benchmark result:
+      &lt;/p&gt;
+      
+      &lt;table&gt;
+        &lt;tr&gt;
+          &lt;th&gt;
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=100
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=200
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=500
+          &lt;/th&gt;
+          
+          &lt;th&gt;
+            c=600
+          &lt;/th&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Requests per second
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            62.57
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            57.19
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            54.67
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            51.81
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            1598.324
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            3496.824
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            9146.226
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            11581.078
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Time per request(all concurrent)
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            15.983
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            17.484
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            18.292
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            19.302
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        
+        &lt;tr&gt;
+          &lt;th&gt;
+            Transfer rate
+          &lt;/th&gt;
+          
+          &lt;td&gt;
+            2755.85
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            2513.70
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            2416.69
+          &lt;/td&gt;
+          
+          &lt;td&gt;
+            2279.40
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+      
+      &lt;p&gt;
+        Notice the results of HP Cloud xSmall, the static page results were far more lower than the WordPress home page, this may be caused by the low performance of I/O.
+      &lt;/p&gt;
+      
+      &lt;h2&gt;
+        4. Conclusion
+      &lt;/h2&gt;
+      
+      &lt;p&gt;
+        It has no doubt that AWS EC2 Micro was sufficient for personal website with low traffic. Although the UnixBench result of HP Cloud xSmall was good than AWS EC2 Micro, but the overall performance for web application was not satisfactory. Considering the maturity and reliability of platform, AWS EC2 Micro must be a good choice for personal web site.
+      &lt;/p&gt;
+
+ [1]: https://www.hpcloud.com/free-trial
+ [2]: http://aws.amazon.com/ec2/instance-types/
+&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+</description>
+        <pubDate>Sun, 10 Mar 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/server/comparison-of-hp-cloud-xsmall-and-aws-ec2-micro/</link>
+        <guid isPermaLink="true">http://tangobean.com/server/comparison-of-hp-cloud-xsmall-and-aws-ec2-micro/</guid>
+        
+        <category>AWS</category>
+        
+        <category>Cloud</category>
+        
+        <category>EC2</category>
+        
+        <category>HP Cloud</category>
+        
+        <category>Linux</category>
+        
+        <category>PHP</category>
+        
+        
+        <category>server</category>
+        
+      </item>
+    
+      <item>
+        <title>Compile Linux Kernel on CentOS6</title>
+        <description>&lt;p&gt;I have tried to compile Linux kernel 2.6.34.14 on CentOS6.3, whose default kernel is 2.6.32, successfully. It’s just for fun, you can follow the following simple steps if you are interested.&lt;/p&gt;
+
+&lt;p&gt;The CentOS6.3 runs on VMware, with 1 virtual CPU and 1GB RAM.&lt;/p&gt;
+
+&lt;h2 id=&quot;fetch-kernel-source&quot;&gt;1. Fetch kernel source&lt;/h2&gt;
+
+&lt;p&gt;Download the source of one kernel version from &lt;a href=&quot;http://kernel.org/&quot;&gt;kernel.org&lt;/a&gt;. I selected stable version 2.6.34.14 but not the latest one.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-kernel&quot;&gt;2. Configure kernel&lt;/h2&gt;
+
+&lt;p&gt;Second, extract the source archive and configure the kernel before compiling. There are many different way to configure the kernel, one simplest way is just copy the configuration for current kernel. The configuration file is located at /boot directory, like /boot/config-2.6.32-279.el6.i686. Just copy it to the kernel source directory as &lt;strong&gt;.config&lt;/strong&gt;, and run following command:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;make oldconfig
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://lib.fwso.cn/linux-kernel-config-2.6.34.14&quot; target=&quot;_blank&quot;&gt;linux-kernel-config-2.6.34.14&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;compile&quot;&gt;3. Compile&lt;/h2&gt;
+
+&lt;p&gt;Now compile the kernel just as compiling general applications:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;make
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;install-the-new-kernel&quot;&gt;4. Install the new kernel&lt;/h2&gt;
+
+&lt;p&gt;cp arch/x86/boot/bzImage to /boot directory, you can rename it, and install the kernel modules:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;make modules_install
+&lt;/pre&gt;
+
+&lt;p&gt;Then make initrd with following command:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;mkinitrd /boot/initramfs-2.6.34.14.fwso.img 2.6.34.14.fwso
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;2.6.34.14.fwso&lt;/em&gt; is my compiled kernel version, it should be changed according to your configuration.&lt;/p&gt;
+
+&lt;p&gt;If mkinitrd does not exist, install dracut package:&lt;/p&gt;
+
+&lt;pre class=&quot;brush:plain&quot;&gt;yum install -y dracut
+&lt;/pre&gt;
+
+&lt;p&gt;Finally, configure your grub in order to boot from the new kernel.&lt;/p&gt;
+
+&lt;p&gt;Good luck, enjoy:)&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 19 Feb 2013 00:00:00 +0000</pubDate>
+        <link>http://tangobean.com/server/compile-linux-kernel-on-centos6/</link>
+        <guid isPermaLink="true">http://tangobean.com/server/compile-linux-kernel-on-centos6/</guid>
+        
+        <category>Kernel</category>
+        
+        <category>Linux</category>
+        
+        
+        <category>server</category>
+        
+      </item>
+    
+  </channel>
+</rss>

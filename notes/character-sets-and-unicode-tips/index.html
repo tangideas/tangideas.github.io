@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Character Sets and Unicode Tips</title>
+  <meta name="description" content="1. Character sets">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://tangobean.com/notes/character-sets-and-unicode-tips/">
+  <link rel="alternate" type="application/rss+xml" title="TangoBean" href="http://tangobean.com/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">TangoBean</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Character Sets and Unicode Tips</h1>
+    <p class="post-meta">Jun 7, 2012 • James Tang</p>
+  </header>
+
+  <article class="post-content">
+    <h2 id="character-sets">1. Character sets</h2>
+
+<p>最熟悉也最简单的字符集莫过于ASCII，如小写字母a对应的编码是97。ASCII采用7位来编码，Extend-ASCII采用8位来编码，所以分别只用表示127和255个字符。如果要编码更多的字符当然需要更多的位来实现，因此需要制定不同的编码来表示不同的语言，如果中文的GB2312。Windows的字符编码称为Code pages，所以经常看GB2312也经常表示为CP936，也有的称为WINDOWS-936。</p>
+
+<p>不同的字符集的编码范围及显示都不一样，一般都只能特定的语言，所以如果程序（如浏览器）对文本采用了不同的字符编码时，就会出现所谓的乱码。Windows下默认的编码显示为ANSI, 事实上ANSI并不是一个具体的字符编码。无论是英文版、中文版、日文版Windows,默认编码都是ANSI，但实际上对应不同的编码：</p>
+
+<blockquote>
+  <p>Note ANSI code pages can be different on different computers, or can be changed for a single computer, leading to data corruption. For the most consistent results, applications should use Unicode, such as UTF-8 or UTF-16, instead of a specific code page.</p>
+</blockquote>
+
+<h3 id="section">示例</h3>
+
+<p>在Windows下创建一个文件cn.txt，输入中文并采用Windows默认编码，然后在Linux用cat查看，将看到中文显示为乱码，因为Linux shell默认编码是UTF-8, 用file命令查看cn.txt：</p>
+
+<pre class="brush:bash">file cn.txt
+</pre>
+
+<p>显示结果为：</p>
+
+<pre class="brush:plain">cn.txt: ISO-8859 text, with CRLF line terminators
+</pre>
+
+<p>或者</p>
+
+<pre class="brush:bash">file -bi cn.txt
+</pre>
+
+<p>结果为：</p>
+
+<pre class="brush:plain">text/plain; charset=iso-8859-1
+</pre>
+
+<p>事实上结果是错误的，如果试图用iconv转换为UTF-8：</p>
+
+<pre class="brush:bash">iconv -f ISO-8859-1 -t UTF-8 cn.txt -o cn2.txt
+</pre>
+
+<p>cn2.txt中文依然是乱码。</p>
+
+<p>由于cn.txt是在中文Windows下创建，其编码实际上是GB2312，所以需要将-f参数改为GB2312/WINSOWS-936/CP936/GBK,所以这样才能正确转换：</p>
+
+<pre class="brush:bash">iconv -f WINDOWS-936 -t UTF-8 cn.txt -o cn2.txt
+</pre>
+
+<p>再用file查看，发现除了显示为UTF-8编码外，还显示换行符是CRLR，这是windows的默认换行符：</p>
+
+<pre class="brush:plain">cn2.txt: UTF-8 Unicode text, with CRLF line terminators
+</pre>
+
+<h2 id="unicode">2. Unicode</h2>
+
+<p>由于国际化的需要，很多内容需要同时表示多种语言的字符，因此需要一种统一的字符编码，Unicode就是为此而诞生。</p>
+
+<blockquote>
+  <p>Unicode provides a unique number for every character, no matter what the platform, no matter what the program, no matter what the language.</p>
+</blockquote>
+
+<p>Unicode定义了几乎所有文字的字符（还包括一此没有使用的）编码及其表现(representation)，以及Unicode的实现方式UTF-8、UTF-16、UTF-32。</p>
+
+<p>Unicode将中文、日文、韩文的编码统称为CJK Unified Ideographs，编码范围为U+4E00-U+9FCC，可以在<a href="http://www.unicode.org/charts/unihan.html">这里</a>查询汉字的Unicode编码。</p>
+
+<h2 id="utf-8">3. UTF-8</h2>
+
+<p>UTF-8也许是目前应用最广的Unicode实现方式，其编码规则如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>编码范围</th>
+      <th>二进制序列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0000 0000-0000 007F</td>
+      <td>0xxxxxxx</td>
+    </tr>
+    <tr>
+      <td>0000 0080-0000 07FF</td>
+      <td>110xxxxx 10xxxxxx</td>
+    </tr>
+    <tr>
+      <td>0000 0800-0000 FFFF</td>
+      <td>1110xxxx 10xxxxxx 10xxxxxx</td>
+    </tr>
+    <tr>
+      <td>0001 0000-0010 FFFF</td>
+      <td>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>可以看出UTF-8兼容ASCII字符编码；从CJK的编码范围可知，中文编码是三个字节，“中”的Unicode编码为U+4E2D，故其UTF-8表示是0xE4B8AD。</p>
+
+<h3 id="section-1">示例</h3>
+
+<p>创建utf8.txt并输入以下内容:</p>
+
+<pre class="brush:plain">a中国
+</pre>
+
+<p>用xxd命令查看其16进制内容：</p>
+
+<pre class="brush:bash">xxd utf8.txt
+</pre>
+
+<p>输入如下：</p>
+
+<pre class="brush:plain">61e4 b8ad e59b bd0a
+</pre>
+
+<p>0x61是小写字母a, 0x0A是换行符：</p>
+
+<pre class="brush:plain">0x61 = 01100001 = 97(a)
+0x0A = 00001010 = 10(new line)
+0xE4B8AD = 1110 0100 10111000 10101101 =&gt; 0100 1110 0010 1101 = 4E2D(中)
+0xE59BBD = 1110 0101 10011011 10111101 =&gt; 0101 0110 1111 1101 = 56FD(国)
+</pre>
+
+<h3 id="work-with-regular-expression">Work with Regular expression</h3>
+
+<p>在正则中有时需要匹配中文字符，不同语言表示有点不同：</p>
+
+<p>JavaScript示例：</p>
+
+<pre class="brush:javascript">var str = 'abc中国def';
+str.match('\u4e2d')
+str.match('中')
+</pre>
+
+<p>PHP示例：</p>
+
+<pre class="brush:php">$str = 'abc中国def';
+preg_match('/中/', $str, $match);//UTF-8 file
+preg_match('/\x{4e2d}/u', $str, $match);
+</pre>
+
+<h2 id="conclusion">4. Conclusion</h2>
+
+<p>GB2312/GBK是用两个字节编码中文，而UTF-8需要3个字符，所以不需要考虑国际化因素，使用GB2312可以节约一点空间，对于网页来说可以减少传输内容，节约一点带宽资源。但在国际化的大环境中，UTF-8还是首选。</p>
+
+<h2 id="referecne">5. Referecne</h2>
+
+<ol>
+  <li><a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd317756(v=vs.85).aspx" title="Windows Code page identifiers"> Windows Code page identifiers</a>.</li>
+  <li><a href="http://en.wikipedia.org/wiki/Character_encoding">Character encoding(Wikipedia)</a>.</li>
+  <li><a href="http://tools.ietf.org/html/rfc3629">RFC3629, UTF-8</a>.</li>
+  <li><a href="http://www.unicode.org/">Unicode official site</a>.</li>
+  <li><a href="http://www.unicode.org/versions/Unicode6.1.0/">Unicode 6.1.0</a>.</li>
+  <li><a href="http://www.unicode.org/charts/">Unicode 6.1 Character Code Charts</a>.</li>
+</ol>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">TangoBean</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>TangoBean</li>
+          <li><a href="mailto:"></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/fwso">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">fwso</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/fwso">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">fwso</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Think In Practice</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

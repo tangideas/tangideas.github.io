@@ -1,11 +1,11 @@
 # Site settings
-title: Go far code
+title: TangoBean
 description: > # this means to ignore newlines until "baseurl:"
     Think in practice.
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://gofarcode.com" # the base hostname & protocol for your site
+url: "http://tangobean.com" # the base hostname & protocol for your site
 #twitter_username: fwso
-github_username: fwso 
+github_username: fwso
 
 # Build settings
 markdown: kramdown

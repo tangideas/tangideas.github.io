@@ -4,5 +4,5 @@ title: About
 permalink: /about/
 ---
 
-James Tang, Programmer.
+James Tang, Software Engineer.
 

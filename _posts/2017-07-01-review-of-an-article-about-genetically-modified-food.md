@@ -64,16 +64,16 @@ AMPA，即氨甲基膦酸[4]，是草甘膦被微生物分解后的代谢产物�
 
 ## 相关文章及链接
 
-[1] 曹明华, [旅美华人：我曾跟随崔永元在美国拍摄转基因纪录片，他无意中触及一个巨大的国际利益集团](https://mp.weixin.qq.com/s?__biz=MzI5MTYzNjYzMA==&mid=2247484025&idx=1&sn=954ccff2379168d83742c245156d85dd&scene=21#wechat_redirect) 
-[2] [Frequently asked questions on genetically modified foods](http://www.who.int/foodsafety/areas_work/food-technology/faq-genetically-modified-food/en/)
-[3] [Glyphosate](https://en.wikipedia.org/wiki/Glyphosate)
-[4] [AMPA](https://en.wikipedia.org/wiki/Aminomethylphosphonic_acid)
-[5] [How “Extreme Levels” of Roundup in Food Became the Industry Norm](https://www.independentsciencenews.org/news/how-extreme-levels-of-roundup-in-food-became-the-industry-norm/)
-[6] [European Union, A decade of EU-funded GMO research](http://ec.europa.eu/research/biosociety/pdf/a_decade_of_eu-funded_gmo_research.pdf)
-[7] [Alessandro Nicolia et al., An overview of the last 10 years of genetically engineered crop safety research](http://www.agrobio.org/bfiles/fckimg/Nicolia%202013.pdf)
-[8] [Glyphosate and AMPA in Drinking-water](http://www.who.int/water_sanitation_health/dwq/chemicals/glyphosateampa290605.pdf)
-[9] IARC, [LIST OF CLASSIFICATIONS, VOLUMES 1–119](http://monographs.iarc.fr/ENG/Classification/latest_classif.php)
-[10] T.Bøhn et al., [Compositional differences in soybeans on the market: Glyphosate accumulates in Roundup Ready GM soybeans](http://www.sciencedirect.com/science/article/pii/S0308814613019201)
-[11] [Carcinogenicity of tetrachlorvinphos, parathion, malathion, diazinon, and glyphosate](http://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(15)70134-8/fulltext)
+- [1] 曹明华, [旅美华人：我曾跟随崔永元在美国拍摄转基因纪录片，他无意中触及一个巨大的国际利益集团](https://mp.weixin.qq.com/s?__biz=MzI5MTYzNjYzMA==&mid=2247484025&idx=1&sn=954ccff2379168d83742c245156d85dd&scene=21#wechat_redirect) 
+- [2] [Frequently asked questions on genetically modified foods](http://www.who.int/foodsafety/areas_work/food-technology/faq-genetically-modified-food/en/)
+- [3] [Glyphosate](https://en.wikipedia.org/wiki/Glyphosate)
+- [4] [AMPA](https://en.wikipedia.org/wiki/Aminomethylphosphonic_acid)
+- [5] [How “Extreme Levels” of Roundup in Food Became the Industry Norm](https://www.independentsciencenews.org/news/how-extreme-levels-of-roundup-in-food-became-the-industry-norm/)
+- [6] [European Union, A decade of EU-funded GMO research](http://ec.europa.eu/research/biosociety/pdf/a_decade_of_eu-funded_gmo_research.pdf)
+- [7] [Alessandro Nicolia et al., An overview of the last 10 years of genetically engineered crop safety research](http://www.agrobio.org/bfiles/fckimg/Nicolia%202013.pdf)
+- [8] [Glyphosate and AMPA in Drinking-water](http://www.who.int/water_sanitation_health/dwq/chemicals/glyphosateampa290605.pdf)
+- [9] IARC, [LIST OF CLASSIFICATIONS, VOLUMES 1–119](http://monographs.iarc.fr/ENG/Classification/latest_classif.php)
+- [10] T.Bøhn et al., [Compositional differences in soybeans on the market: Glyphosate accumulates in Roundup Ready GM soybeans](http://www.sciencedirect.com/science/article/pii/S0308814613019201)
+- [11] [Carcinogenicity of tetrachlorvinphos, parathion, malathion, diazinon, and glyphosate](http://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(15)70134-8/fulltext)
 
 

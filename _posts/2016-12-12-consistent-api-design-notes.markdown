@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Consistent API Design Notes"
-author: <a href="https://github.com/fwso">James Tang</a>
+author: <a href="https://github.com/tangideas">James Tang</a>
 date:   2016-12-12 12:01:01
 categories:
   - Architecture

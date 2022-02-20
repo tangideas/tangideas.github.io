@@ -4,8 +4,7 @@ description: > # this means to ignore newlines until "baseurl:"
     Think in practice.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://tangobean.com" # the base hostname & protocol for your site
-#twitter_username: fwso
-github_username: fwso
+github_username: tangideas
 
 # Build settings
 markdown: kramdown

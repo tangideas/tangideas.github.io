@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "UVE Core Framework Architecture"
-author: <a href="https://github.com/fwso">James Tang</a>
+author: <a href="https://github.com/tangideas">James Tang</a>
 date:   2016-06-19 05:01:01
 categories:
   - Architecture

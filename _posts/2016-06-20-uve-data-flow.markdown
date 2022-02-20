@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "UVE Data Flow and Monitoring"
-author: <a href="https://github.com/fwso">James Tang</a>, <a href="https://github.com/lution">Lution</a>
+author: <a href="https://github.com/tangideas">James Tang</a>, <a href="https://github.com/lution">Lution</a>
 date:   2016-06-20 04:01:01
 categories:
   - Architecture
